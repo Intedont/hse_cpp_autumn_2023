@@ -5,38 +5,41 @@
 class TokenParser
 {
 private:
+    // флаги, используемые для проверки регистрации callback функций
+    bool is_start_init = false;
+    bool is_end_init = false;
+    bool is_digit_init = false;
+    bool is_string_init = false;
+
     void (*start_func)(const std::string& s);
     void (*end_func)();
     void (*digit_func)(long long unsigned int& token);
     void (*string_func)(std::string& token);
 
 public:
-    TokenParser() {
-        // задаем дефолтные функции
-        start_func = [] (const std::string& line) { std::cout << "Parsing is started" <<std::endl; };
-        end_func = [] () { std::cout << "Parsing is complete" <<std::endl; };
-        digit_func = [] (long long unsigned int& token) { std::cout << "This is digit token: " << token <<std::endl; };
-        string_func = [] (std::string& token) { std::cout << "This is string token: " << token <<std::endl; };
-
-    }
+    TokenParser() = default;
 
     // Устанавливаем callback-функцию перед стартом парсинга.
     void setStartCallback(void (*start_callback)(const std::string& line)){
+        is_start_init = true;
         start_func = start_callback;
     }
 
     // Устанавливаем callback-функцию после окончания парсинга.
     void setEndCallback(void (*end_callback)()){
+        is_end_init = true;
         end_func = end_callback;
     }
 
     // Устанавливаем callback-функцию для обработки чисел.
     void setDigitTokenCallback(void (*digit_callback)(long long unsigned int& token)){
+        is_digit_init = true;
         digit_func = digit_callback;
     }
 
-    // Тут другие методы для установки callback-функций.
+    // Устанавливаем callback функцию для обработки строковых токенов.
     void setStringTokenCallback(void (*string_callback)(std::string& token)){
+        is_string_init = true;
         string_func = string_callback;
     }
 
@@ -71,10 +74,13 @@ public:
     }
 
     std::vector<std::string> parse(const std::string &line){
-        start_func(line);
+        if(is_start_init){
+            start_func(line);
+        }
 
         std::vector<std::string> tokens = split(line);
         
+        // Определение типа токенов и их обработка соотвествующими функциями
         for(int i = 0; i < tokens.size(); i++){
             if(is_number(tokens[i])){
                 char* end;
@@ -82,20 +88,26 @@ public:
                 // если число не влезло в uint64_t, то обрабатываем как строку
                 if (errno == ERANGE){
                     errno = 0;
-                    string_func(tokens[i]);
+                    if(is_string_init){
+                        string_func(tokens[i]);
+                    }
                 } else {
-                    digit_func(token_converted);
+                    if(is_digit_init){
+                        digit_func(token_converted);
+                    }
                     tokens[i] = std::to_string(token_converted);
                 }
             } else {
-                string_func(tokens[i]);
+                if(is_string_init){
+                    string_func(tokens[i]);
+                }
             }
         }
 
-        end_func();
+        if(is_end_init){
+            end_func();
+        }
 
         return tokens;
     }
 };
-
-

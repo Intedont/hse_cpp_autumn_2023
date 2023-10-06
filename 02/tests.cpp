@@ -9,7 +9,6 @@ protected:
     void TearDown() {}
 };
 
-
 TEST(TestTask, test_splitting){
     
     TokenParser parser;
@@ -43,6 +42,15 @@ TEST(TestTask, test_type_definition){
         }
 }
 
+TEST(TestTask, test_empty){
+    TokenParser parser;
+
+    auto tokens = parser.parse("");
+    ASSERT_EQ(tokens.size(), 0);
+
+    tokens = parser.parse("         ");
+    ASSERT_EQ(tokens.size(), 0);
+}
 
 int main(int argc, char** argv){
     ::testing::InitGoogleTest(&argc, argv);
