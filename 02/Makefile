@@ -1,5 +1,5 @@
 CC=g++
-FLAGS=-std=c++20 -Werror
+FLAGS=-std=c++20 -Wunused-variable -Wall -Wextra -Wsign-conversion -fsanitize=address -Werror
 
 all: tests
 

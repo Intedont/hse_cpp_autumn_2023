@@ -47,7 +47,7 @@ public:
         std::vector<std::string> tokens;
         std::string current_token = "";
 
-        for(int i = 0; i < s.length(); i++){
+        for(unsigned int i = 0; i < s.length(); i++){
             if(s[i] == ' ' || s[i] == '\t' || s[i] == '\n'){
                 if(current_token != ""){
                     tokens.push_back(current_token);
@@ -81,7 +81,7 @@ public:
         std::vector<std::string> tokens = split(line);
         
         // Определение типа токенов и их обработка соотвествующими функциями
-        for(int i = 0; i < tokens.size(); i++){
+        for(unsigned int i = 0; i < tokens.size(); i++){
             if(is_number(tokens[i])){
                 char* end;
                 unsigned long long token_converted = std::strtoull(tokens[i].c_str(), &end, 10);

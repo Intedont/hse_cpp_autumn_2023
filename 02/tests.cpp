@@ -19,7 +19,7 @@ TEST(TestTask, test_splitting){
 
     for(auto& text : texts){
         auto tokens = parser.parse(text);
-        for(int i = 0; i < tokens.size(); ++i){
+        for(unsigned int i = 0; i < tokens.size(); ++i){
             ASSERT_EQ(tokens[i], text_true[i]);
         }
     }
@@ -33,13 +33,13 @@ TEST(TestTask, test_type_definition){
     parser.setStringTokenCallback([] (std::string& token) { token = "string " + token; });
     parser.setEndCallback([] () { std::cout << "Bye" <<std::endl; });
     
-    std::vector<std::string> text_true = {"string one", "4", "string -3", "string 4.5", "string 500000000000000000000"};
+    std::vector<std::string> text_true = {"string one", "4", "string -3", "string 4.5", "string 500000000000000000000", "string 6ix", "646", "0"};
 
-    auto tokens = parser.parse("one 2 -3 4.5 500000000000000000000");
+    auto tokens = parser.parse("one 2 -3 4.5 500000000000000000000 6ix 00323 0");
 
-    for(int i = 0; i < tokens.size(); ++i){
+    for(unsigned int i = 0; i < tokens.size(); ++i){
         ASSERT_EQ(tokens[i], text_true[i]);
-        }
+    }
 }
 
 TEST(TestTask, test_empty){
