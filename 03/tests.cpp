@@ -9,6 +9,7 @@ protected:
     void TearDown() {}
 };
 
+// Тестирование геттеров
 TEST(TestTask, test_getters){
     Matrix m(5, 4);
     ASSERT_EQ(m.get_columns(), 4);
@@ -19,15 +20,18 @@ TEST(TestTask, test_getters){
     ASSERT_EQ(m2.get_rows(), 0);
 }
 
+// Тестирование операторов получения элемента [][]
 TEST(TestTask, test_member_access_operator){
     Matrix m(5, 4);
 
+    // Заполнение матрицы числами
     for(size_t i = 0; i < m.get_rows(); ++i){
         for(size_t j = 0; j < m.get_columns(); ++j){
             m[i][j] = i * j;
         }
     }
 
+    // Проверка корректности заполнения
     for(size_t i = 0; i < m.get_rows(); ++i){
         for(size_t j = 0; j < m.get_columns(); ++j){
             ASSERT_EQ(m[i][j], i * j);
@@ -42,7 +46,7 @@ TEST(TestTask, test_member_access_operator){
     ASSERT_THROW(m[0][4], std::out_of_range);
 }
 
-
+// Тестирование оператора *=
 TEST(TestTask, test_mult_assignment_operator){
     Matrix m(6, 6);
 
@@ -76,22 +80,33 @@ TEST(TestTask, test_mult_assignment_operator){
         }
     }
 
+    // Проверка, что ничего не упадет
     Matrix m1(0,0);
     m1 *= 5;
 }
 
+// Тестирование оператора <<
 TEST(TestTask, test_ostream_operator){
     Matrix m(2, 4);
     m[1][3] = 7;
     m[0][0] = 9;
 
     std::ostringstream output;
-
     output << m;
-
     ASSERT_EQ( output.str(), "9 0 0 0 \n0 0 0 7 \n" );
+
+    Matrix m1(3, 1);
+    std::ostringstream output1;
+    output1 << m1;
+    ASSERT_EQ( output1.str(), "0 \n0 \n0 \n" );
+
+    Matrix m2(0, 0);
+    std::ostringstream output2;
+    output2 << m2;
+    ASSERT_EQ( output2.str(), "" );
 }
 
+// Тестирование оператора копирования и копирующих конструкторов
 TEST(TestTask, test_assignment_and_copy_constructor){
     Matrix m1(2, 4);
     Matrix m2(4, 7);
@@ -161,6 +176,7 @@ TEST(TestTask, test_assignment_and_copy_constructor){
     }
 }
 
+// Тестирование оператора сложения
 TEST(TestTask, test_add_operator){
     Matrix m1(2, 4);
     Matrix m2(2, 4);
@@ -200,7 +216,7 @@ TEST(TestTask, test_add_operator){
 
 }
 
-
+// Тестирование операторов == и !=
 TEST(TestTask, test_equal_operator){
     // Тестирование ==
     Matrix m1(10, 5);

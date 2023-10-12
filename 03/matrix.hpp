@@ -27,7 +27,7 @@ public:
     size_t get_rows() const;
     size_t get_columns() const;
 
-    void operator=(const Matrix& m); // оператор копирования
+    void operator=(const Matrix& m);
     Row& operator [] (size_t index) const;
     Matrix& operator *= (int32_t num);
     friend std::ostream& operator << (std::ostream& out, const Matrix& m);

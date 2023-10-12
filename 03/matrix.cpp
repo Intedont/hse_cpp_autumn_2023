@@ -3,26 +3,24 @@
 
 Matrix::Row::Row() {}
 
-Matrix::Row::Row(size_t c) : columns{new int32_t[c]}, row_size{c}
-{
+Matrix::Row::Row(size_t c) : columns{new int32_t[c]}, row_size{c} {
     for(size_t i = 0; i < c; ++i){
         columns[i] = 0;
     }
 }
 
-// Копирующий конструктор 
+// Копирующий конструктор для строк
 Matrix::Row::Row(const Row& r) : columns{new int32_t[r.row_size]}, row_size{r.row_size} {
     for(size_t i = 0; i < r.row_size; ++i){
         columns[i] = r.columns[i];
     }
 }
 
-Matrix::Row::~Row(){
+Matrix::Row::~Row() {
     delete[] columns;
 }
 
-int32_t& Matrix::Row::operator [] (size_t index) const
-{   
+int32_t& Matrix::Row::operator [] (size_t index) const {   
     if(index < row_size){
         return columns[index];
     }
@@ -31,8 +29,7 @@ int32_t& Matrix::Row::operator [] (size_t index) const
     }
 }
 
-Matrix::Matrix(size_t r, size_t c) : rows{new Row*[r]}, n_rows{r}, n_columns{c}
-{
+Matrix::Matrix(size_t r, size_t c) : rows{new Row*[r]}, n_rows{r}, n_columns{c} {
     for(size_t i = 0; i < r; ++i){
         rows[i] = new Row(n_columns);
     }
@@ -46,8 +43,9 @@ Matrix::Matrix(const Matrix& m) : rows{new Row*[m.n_rows]}, n_rows{m.n_rows}, n_
 }
 
 // Оператор копирования. 
-// В описании задачи его перегрузка не требуется, но без него ничего не работает.
+// В описании задачи его перегрузка не требуется, но без него ничего не работает. Выполняет deep copy.
 void Matrix::operator= (const Matrix& m) {
+    // Очищаем память, выделенную под матрицу левого операнда
     for(size_t i = 0; i < n_rows; ++i){
         delete rows[i];
     }
@@ -55,6 +53,7 @@ void Matrix::operator= (const Matrix& m) {
 
     n_rows = m.n_rows;
     n_columns = m.n_columns;
+    // Инициализируем новую память под матрицу, размером с матрицу правого операнда, и копируем.
     rows = new Row*[n_rows];
 
     for(size_t i = 0; i < n_rows; ++i){
