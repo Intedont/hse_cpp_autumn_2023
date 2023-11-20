@@ -29,8 +29,9 @@ std::ostream& operator<<(std::ostream& out, TestStruct& ts){
 }
 
 
-TEST(TestTask, test_common){
+TEST(TestTask, test_insertion){
     
+    // Тестирование вставки аргументов
     auto text = format("this is {0} test in {1} homework", "first", "sixth");
     ASSERT_EQ(text, "this is first test in sixth homework");
     
@@ -46,7 +47,7 @@ TEST(TestTask, test_common){
     text = format("{0} this is test in homework {1}", 6, "first");
     ASSERT_EQ(text, "6 this is test in homework first");
 
-    // Тестирование вывода в строку кастомного объекта
+    // Тестирование вставки в строку кастомного объекта с перегруженным <<
     TestStruct ts(4567, "this is my string", -46.81);
     text = format("{0} this is {2} test in {1} homework {3}", ts, 6, "first", ts);
     ASSERT_EQ(text, "4567 this is my string -46.81 this is first test in 6 homework 4567 this is my string -46.81");
@@ -63,7 +64,6 @@ TEST(TestTask, test_exceptions){
     ASSERT_THROW(format("}this is {0} test in {1} homework", "first", "sixth"), SymbolIsReserved);
     ASSERT_THROW(format("this{{{{ is {0} test in {1} homework", "first", "sixth"), SymbolIsReserved);
     
-    
     // Если аргументов меньше, чем требуется в строке
     ASSERT_THROW(format("this is {0} test in {5} homework", "first", "sixth"), ArgumentNotFound);
     // Не требуем выбрасывания исключения, если число аргументов больше, чем требуется в строке
@@ -72,6 +72,7 @@ TEST(TestTask, test_exceptions){
     // Тестируем кривую передачу номеров аргументов
     ASSERT_THROW(format("this is {ьмао} test in {5} homework", "first", "sixth"), ConvertError);
     ASSERT_THROW(format("this is {1.2} test in {5} homework", "first", "sixth"), ConvertError);
+    ASSERT_THROW(format("{1} this is test in homework{//}", "first", "sixth"), ConvertError);
 
 }
 
