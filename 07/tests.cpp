@@ -73,6 +73,9 @@ TEST(TestTask, test_structure_and_insertion){
     mytree_reversed.insert(std::pair<key, value>(1, "something1"));
     ASSERT_EQ(mytree_reversed.print().str(), "532149768111012");
 
+    // Попытка вставить существующий ключ
+    mytree_reversed.insert(std::pair<key, value>(2, "wow"));
+    ASSERT_EQ(mytree_reversed.at(2), "something2");
     
     // Тестирование вставки в середину на float числах
     AVL<const float, std::string, std::less<const float>, DumbAllocator<std::pair<const float, value>>> mytree_float;
@@ -82,12 +85,15 @@ TEST(TestTask, test_structure_and_insertion){
     ASSERT_EQ(mytree_float.print().str(), "7.92.4");
     mytree_float.insert(std::pair<const float, value>(3.1432, "something6"));
     ASSERT_EQ(mytree_float.print().str(), "3.14322.47.9");
-    //mytree_float.insert(std::pair<const float, value>(float(3.17), "something5"));
-    //ASSERT_EQ(mytree_float.print().str(), "3.14322.47.93.17");
-    /*mytree_float.insert(std::pair<const float, value>(3.16, "something6"));
-    ASSERT_EQ(mytree_float.print().str(), "3.142.43.173.167.9");
-    mytree_float.insert(std::pair<const float, value>(3.18, "something6"));
-    ASSERT_EQ(mytree_float.print().str(), "3.173.142.43.167.93.18");*/
+    mytree_float.insert(std::pair<const float, value>(float(4), "something5"));
+    ASSERT_EQ(mytree_float.print().str(), "3.14322.47.94");
+
+    // Тестирование на std::string
+    AVL<std::string, int, std::less<std::string>, DumbAllocator<std::pair<std::string, int>>> mytree_string;
+    mytree_string.insert(std::pair<std::string, int>({"CPU", 10}));
+    mytree_string.insert(std::pair<std::string, int>({"GPU", 15}));
+    mytree_string.insert(std::pair<std::string, int>({"RAM", 20}));
+    ASSERT_EQ(mytree_string.print().str(), "GPUCPURAM");
 
 }
 
