@@ -1,0 +1,9 @@
+json loads time is: 0.0470881462097168 
+json dumps time is: 0.05875706672668457 
+
+ujson loads time is: 0.0436558723449707 
+ujson dumps time is: 0.021010875701904297 
+
+cjson loads time is: 0.10635685920715332 
+cjson dumps time is: 0.027382612228393555 
+
